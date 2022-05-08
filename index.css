@@ -1,0 +1,144 @@
+body {
+    background : rgba(0, 0, 0, 0.951);
+}
+
+hr {
+    width: 100%;
+    position:static;
+}
+
+:root{
+    --active-button-color: rgba(250, 204, 204, 0.7);
+}
+
+.keyboard {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 5px 0;
+    background: #1d1d1d;
+    box-shadow: 0 0 50px rgba(2, 2, 2, 0.5);
+    user-select: none;
+    transition: bottom 0.4s;
+}
+
+
+.keyboard--hidden {
+    bottom: -100%;
+
+}
+
+
+.keyboard__keys{
+    text-align: center;
+}
+
+.keyboard__key {
+    height: 45px;
+    width: 6%;
+    max-width: 90px;
+    margin: 3px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(250, 204, 204, 0.64);
+    color: rgb(255, 255, 255);
+    font-size: 1.05rem;
+    outline: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+
+.keyboard__key:active {
+    background: rgba(166, 120, 120, 0.7);
+}
+
+.keyboard__key[guesed]{
+    background: rgba(62, 248, 68, 0.951);
+}
+
+.keyboard__key[guesed]:active{
+    background: rgba(55, 186, 59, 0.951);
+}
+
+.keyboard__key[found]{
+    background: rgb(212, 212, 64);
+}
+
+.keyboard__key[found]:active{
+    background: rgb(176, 176, 52);
+}
+
+.keyboard__key[used]{
+    background: rgb(78, 78, 78);
+}
+
+.keyboard__key[used]:active{
+    background: rgb(71, 71, 71);
+}
+
+.keyboard__key--wide {
+    width: 12%;
+}
+
+.keyboard__key--dark {
+    background:rgba(0, 0, 0, 0.25);
+}
+
+.table{
+    display: table;
+	margin: auto;
+	position: relative;
+}
+
+.inner {
+	width: 70px;
+	height: 70px;
+	font-size: 50px;
+	line-height: 70px;
+	text-align: center;
+	text-transform: uppercase;
+	border: 1px solid rgb(255, 255, 255);
+	margin: 4px;
+    box-shadow: 3px 4px 1px 2px rgba(255, 255, 255, 0.1);
+	text-shadow: 2px 3px  1px rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.951);
+}
+
+.inner[activeRow]:hover {
+    /* width: 74px;
+    height: 74px; */
+    border: 1px solid rgb(255, 0, 0);
+
+}
+
+.inner[unactiveRow]:hover {
+    /* width: 74px;
+    height: 74px; */
+    border: 1px solid rgb(162, 162, 162);
+
+}
+
+.inner[chosenCell]{
+    border: 1px solid rgb(70, 225, 31);
+
+}
+
+.inner[chosenCell]:hover {
+    border: 1px solid rgb(60, 130, 42);
+}
+
+
+.text{
+    color: aliceblue;
+    text-align: center;
+}
+
+
+
