@@ -3,7 +3,7 @@ import {maxTriesNumber, allWordsLength } from "./current_words.js";
 let chosenCellNumber = 0
 
 function divClickEvents(div){
-    div = div.srcElement
+    div = div.target
     if (div.hasAttribute("chosenCell")){
         div.removeAttribute("chosenCell")
         div.setAttribute("activeRow", true)
@@ -51,18 +51,18 @@ export function gridInit() {
             div.classList.add('inner');
             td.appendChild(div);
             div.innerHTML = ""
-            div.setAttribute("unactiveRow", true)
+            div.setAttribute("inactiveRow", true)
             div.addEventListener("click", divClickEvents)
-        };
+        }
         tbody.appendChild(tr);
-    };
+    }
 
     table.appendChild(tbody)
     mainDiv.appendChild(table);
     gameDiv.appendChild(mainDiv);
     document.getElementById('body').appendChild(gameDiv);
 
-    Array.from(document.querySelectorAll(".inner")).slice(0, allWordsLength).forEach((element) => {element.setAttribute("activeRow", true); element.removeAttribute('unactiveRow')})
+    Array.from(document.querySelectorAll(".inner")).slice(0, allWordsLength).forEach((element) => {element.setAttribute("activeRow", true); element.removeAttribute('inactiveRow')})
 }
 
 
@@ -78,7 +78,7 @@ export function changeChosenCellNumber (val){
     }
     else{
         allCells[chosenCellNumber].removeAttribute("chosenCell")
-        allCells[chosenCellNumber].setAttribute("unactiveRow", true)
+        allCells[chosenCellNumber].setAttribute("inactiveRow", true)
         chosenCellNumber = null
     }
 }
