@@ -1,5 +1,6 @@
-import {six_symbol_words, finalWord, allWordsLength, maxTriesNumber} from './current_words.js';
+import {n_symbol_words, finalWord, allWordsLength, maxTriesNumber} from './current_words.js';
 import {chosenCellNumber, changeChosenCellNumber} from './grid.js';
+import {windowInit} from './window_related_functions.js';
 
 let alt = false
 
@@ -12,7 +13,7 @@ function convertLetters(letter){
                         "-", "Ф", "І", "В", "А", "П", "Р", "О", "Л", "Д", "Ж", "Є",
                         '<i class="material-icons">keyboard_return</i>', "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю", '<i class="material-icons">backspace</i>']
 
-    let letters = new Object();
+    let letters = {};
 
 
 
@@ -20,21 +21,21 @@ function convertLetters(letter){
          letters[engLetters[i]] = uaLetters[i]
     }
 
-    let answ = letters[letter]
+    let answer = letters[letter]
 
-    if (letter == 'KeyU'){
-        if (alt == true) {
-            answ = 'Ґ'
+    if (letter === 'KeyU'){
+        if (alt === true) {
+            answer = 'Ґ'
         }
     }
 
 
-    return answ
+    return answer
 }
 
 function moveChosenCell(direction){
     const cellsList = Array.from(document.querySelectorAll('.inner'))
-    if (direction == 'right'){
+    if (direction === 'right'){
         if (cellsList[chosenCellNumber+1] && cellsList[chosenCellNumber+1].hasAttribute("activeRow")){
 
             // cellsList[chosenCellNumber].removeAttribute("chosenCell")
@@ -53,7 +54,7 @@ function moveChosenCell(direction){
         }
     
     }
-    else if (direction == 'left'){
+    else if (direction === 'left'){
         if (cellsList[chosenCellNumber-1] && cellsList[chosenCellNumber-1].hasAttribute("activeRow")){
 
             // cellsList[chosenCellNumber].removeAttribute("chosenCell")
@@ -110,13 +111,13 @@ export const Keyboard = {
     _changeColorKeys(lastWord, finWord, allKeys) {
 
 
-        let keyGuesed = []
+        let keyGuessed = []
         let keyFound = []
         let keyUsed = []
 
         for (let key in lastWord){
-            if (lastWord[key] == finWord[key]){
-                keyGuesed.push(lastWord[key])
+            if (lastWord[key] === finWord[key]){
+                keyGuessed.push(lastWord[key])
             }
             else if (finWord.includes(lastWord[key])){
                 keyFound.push(lastWord[key])
@@ -128,15 +129,15 @@ export const Keyboard = {
 
         for (let key in allKeys){
 
-            if (keyGuesed.includes(allKeys[key].innerHTML)){
+            if (keyGuessed.includes(allKeys[key].innerHTML)){
 
                 if (allKeys[key].hasAttribute("found")){
                     allKeys[key].removeAttribute("found");}
                 
-                allKeys[key].setAttribute("guesed", 1)
+                allKeys[key].setAttribute("guessed", 1)
             }
             else if (keyFound.includes(allKeys[key].innerHTML)){
-                if (!(allKeys[key].hasAttribute("guesed"))){
+                if (!(allKeys[key].hasAttribute("guessed"))){
                     allKeys[key].setAttribute("found", 1);
                 }
             }
@@ -151,26 +152,26 @@ export const Keyboard = {
 
     _changeColorCells(lastWord, finWord, allCells, words){
 
-        let cellsGuesed = []
+        let cellsGuessed = []
         let cellsFound = []
 
 
 
         for (let keys = (words.length-1)*allWordsLength; keys < words.length*allWordsLength; keys++){
-            if (allCells[keys].innerHTML == finWord[keys - (words.length-1)*allWordsLength]){
-                cellsGuesed.push(allCells[keys])
+            if (allCells[keys].innerHTML === finWord[keys - (words.length-1)*allWordsLength]){
+                cellsGuessed.push(allCells[keys])
             }
             else if(finWord.includes(allCells[keys].innerHTML)){
                 cellsFound.push(allCells[keys])
             }
         }
 
-        let cellsGuesedValues = []
+        let cellsGuessedValues = []
 
-        cellsGuesed.forEach(val => cellsGuesedValues.push(val.innerHTML))
+        cellsGuessed.forEach(val => cellsGuessedValues.push(val.innerHTML))
 
-        for (let keys in cellsGuesed){
-            cellsGuesed[keys].style.background = 'green'
+        for (let keys in cellsGuessed){
+            cellsGuessed[keys].style.background = 'green'
         }
 
 
@@ -193,7 +194,7 @@ export const Keyboard = {
 
         for (let keys in cellsFound){
 
-            if (!(cellsGuesedValues.includes(cellsFound[keys].innerHTML)) && (changedCounts[cellsFound[keys].innerHTML] < counts[cellsFound[keys].innerHTML] || changedCounts[cellsFound[keys].innerHTML] == undefined)){
+            if (!(cellsGuessedValues.includes(cellsFound[keys].innerHTML)) && (changedCounts[cellsFound[keys].innerHTML] < counts[cellsFound[keys].innerHTML] || changedCounts[cellsFound[keys].innerHTML] === undefined)){
                 changedSymbolsString+=cellsFound[keys].innerHTML
                 changedCounts = countChar(changedSymbolsString)
                 cellsFound[keys].style.background = 'rgb(176, 176, 52)'
@@ -225,15 +226,15 @@ export const Keyboard = {
 
             switch (key) {
                 case "backspace":
-                    let cellsList = Array.from(document.querySelectorAll(".inner")).slice(this.properties.words.length * allWordsLength , (this.properties.words.length+1) * allWordsLength)
                     keyElement.classList.add("keyboard__key--wide");
                     keyElement.innerHTML = createIconHTML("backspace")
                     keyElement.addEventListener("click", () => {
 
-                        if (this.eventHandlers.gameResult == "None"){
+                        if (this.eventHandlers.gameResult === "None"){
+                            let cellsList = Array.from(document.querySelectorAll(".inner"))
                             let firstNonEmptyCellIndex = chosenCellNumber
                             for (let i = chosenCellNumber; i >= this.properties.words.length * allWordsLength; i--){
-                                if (cellsList[i] && cellsList[i].innerHTML != ""){
+                                if (cellsList[i] && cellsList[i].innerHTML !== ""){
                                     firstNonEmptyCellIndex = i
                                     break
                                 }
@@ -241,7 +242,7 @@ export const Keyboard = {
                             changeChosenCellNumber(firstNonEmptyCellIndex)
                             this.properties.value = ""
                             this._triggerEvent("oninput");
-                            if(chosenCellNumber % allWordsLength != 0){
+                            if(chosenCellNumber % allWordsLength !== 0){
                                 moveChosenCell("left")
                             }
                         }
@@ -254,43 +255,84 @@ export const Keyboard = {
                     keyElement.innerHTML = createIconHTML("keyboard_return");
                     keyElement.addEventListener("click", () => {
                     
-                    let cellsList = Array.from(document.querySelectorAll(".inner")).slice(this.properties.words.length * allWordsLength , (this.properties.words.length+1) * allWordsLength)
-                    function combineSymbols (total, nextCell){
-                        return total + nextCell.innerHTML
-                    }
-                    let newWord = cellsList.reduce(combineSymbols, '')
+                        let cellsList = Array.from(document.querySelectorAll(".inner")).slice(this.properties.words.length * allWordsLength , (this.properties.words.length+1) * allWordsLength)
+                        function combineSymbols (total, nextCell){
+                            return total + nextCell.innerHTML
+                        }
+                        let newWord = cellsList.reduce(combineSymbols, '')
+                            if (this.eventHandlers.gameResult === "None"){
+                                if (newWord && newWord.length % allWordsLength === 0){
+                                    let allKeys = Array.from(document.querySelectorAll('.keyboard__key'));
+                                    let allCells = Array.from(document.querySelectorAll('.inner'));
 
-                        if (newWord.length % allWordsLength == 0 && this.eventHandlers.gameResult == "None"){
-                            let allKeys = Array.from(document.querySelectorAll('.keyboard__key'));
-                            let allCells = Array.from(document.querySelectorAll('.inner'));
+                                    if (n_symbol_words.includes(newWord.toLowerCase())){
+                                        this.properties.words.push(newWord);
 
-                            if (!(this.properties.words.includes(newWord)) && six_symbol_words.includes(newWord.toLowerCase())){
-                                this.properties.words.push(newWord);
+                                        this._changeColorKeys(newWord, this.properties.endWord, allKeys)
+                                        this._changeColorCells(newWord, this.properties.endWord, allCells, this.properties.words)
+                                        
+                                        if (this.properties.words.length !== maxTriesNumber){
+                                            changeChosenCellNumber(this.properties.words.length * allWordsLength)
+                                        }
+                                    }
+                                    else{
+                                        windowInit("Нам не відомо це слово")
+                                    }
 
-                                this._changeColorKeys(newWord, this.properties.endWord, allKeys)
-                                this._changeColorCells(newWord, this.properties.endWord, allCells, this.properties.words)
-                                
-                                if (this.properties.words.length != maxTriesNumber){
-                                    changeChosenCellNumber(this.properties.words.length * allWordsLength)
+                                    if (newWord === this.properties.endWord){
+                                        this.eventHandlers.gameResult = "win"
+                                        allCells.slice(
+                                            (this.properties.words.length-1) *
+                                            allWordsLength, this.properties.words.length * allWordsLength)
+                                            .forEach((element) => {element.removeAttribute
+                                            ("activeRow"); element.removeAttribute
+                                            ("chosenCell"); element.setAttribute
+                                            ("inactiveRow", 1)})
+                                        changeChosenCellNumber(null)
+                                        windowInit("Ви перемогли!\nЗагадане слово: " + this.properties.endWord)
+                                    }
+                                    else if(this.properties.words.length === maxTriesNumber){
+                                        this.eventHandlers.gameResult = "fail"
+                                        changeChosenCellNumber(null)
+                                        windowInit("Ви програли\nЗагадане слово: " + this.properties.endWord)
+                                        allCells.slice(
+                                            (this.properties.words.length-1) *
+                                            allWordsLength, this.properties.words.length * allWordsLength)
+                                            .forEach((element) => {element.removeAttribute("activeRow")
+                                            ; element.removeAttribute("chosenCell"); element.setAttribute
+                                            ("inactiveRow", 1)})
+                                        allCells.slice(
+                                            this.properties.words.length * allWordsLength,
+                                            (this.properties.words.length+1) * allWordsLength)
+                                            .forEach((element) => {element.removeAttribute
+                                            ("inactiveRow"); element.removeAttribute
+                                            ("chosenCell"); element.setAttribute
+                                            ("activeRow", 1)})
+                                    }
+                                    else{
+                                        allCells.slice((this.properties.words.length-1)
+                                            * allWordsLength, this.properties.words.length * allWordsLength)
+                                            .forEach((element) => {element.removeAttribute
+                                            ("activeRow"); element.removeAttribute
+                                            ("chosenCell"); element.setAttribute
+                                            ("inactiveRow", 1)})
+                                        allCells.slice(this.properties.words.length * allWordsLength,
+                                            (this.properties.words.length+1) * allWordsLength).forEach((element)=> {element.removeAttribute("inactiveRow");
+                                                element.removeAttribute("chosenCell");
+                                                element.setAttribute("activeRow", 1)})
+                                    }
+
                                 }
                                 else{
-                                    this.eventHandlers.gameResult = "fail"
-                                    changeChosenCellNumber(null)
+                                    windowInit("Введіть слово повністю")
                                 }
                             }
-
-                            if (newWord == this.properties.endWord){
-                                this.eventHandlers.gameResult = "win"
-                                allCells.slice((this.properties.words.length-1) * allWordsLength, this.properties.words.length * allWordsLength).forEach((element) => {element.removeAttribute("activeRow"); element.removeAttribute("chosenCell"); element.setAttribute("unactiveRow", 1)})
-                                changeChosenCellNumber(null)
-                                console.log("You won!")
+                            else if (this.eventHandlers.gameResult === "win"){
+                                windowInit("Ви перемогли!\nЗагадане слово: " + this.properties.endWord)
                             }
-                            else{
-                                allCells.slice((this.properties.words.length-1) * allWordsLength, this.properties.words.length * allWordsLength).forEach((element) => {element.removeAttribute("activeRow"); element.removeAttribute("chosenCell"); element.setAttribute("unactiveRow", 1)})
-                                allCells.slice(this.properties.words.length * allWordsLength, (this.properties.words.length+1) * allWordsLength).forEach((element) => {element.removeAttribute("unactiveRow"); element.removeAttribute("chosenCell"); element.setAttribute("activeRow", 1)})
+                            else if (this.eventHandlers.gameResult === "fail"){
+                                windowInit("Ви програли\nЗагадане слово: " + this.properties.endWord)
                             }
-
-                        };
                     });
 
                     break;
@@ -302,16 +344,16 @@ export const Keyboard = {
 
                     keyElement.addEventListener("click", () => {
 
-                        if (this.eventHandlers.gameResult == "None") {
-                            if (allCells[chosenCellNumber].innerHTML == ""){
+                        if (this.eventHandlers.gameResult === "None") {
+                            if (allCells[chosenCellNumber].innerHTML === ""){
                                 this.properties.value = key.toUpperCase();
                                 this._triggerEvent("oninput");
-                                if (allCells[chosenCellNumber+1] && (chosenCellNumber+1)%allWordsLength != 0 && allCells[chosenCellNumber+1].innerHTML == ""){
+                                if (allCells[chosenCellNumber+1] && (chosenCellNumber+1)%allWordsLength !== 0 && allCells[chosenCellNumber+1].innerHTML === ""){
                                     moveChosenCell("right")
                                 }
                             }
-                            else if(allCells[chosenCellNumber].innerHTML != "" ){
-                                if (allCells[chosenCellNumber+1] && (chosenCellNumber+1)%allWordsLength != 0 && allCells[chosenCellNumber+1].innerHTML == ""){
+                            else if(allCells[chosenCellNumber].innerHTML !== "" ){
+                                if (allCells[chosenCellNumber+1] && (chosenCellNumber+1)%allWordsLength !== 0 && allCells[chosenCellNumber+1].innerHTML === ""){
                                     moveChosenCell("right")
                                 }
                                 this.properties.value = key.toUpperCase();
@@ -361,7 +403,7 @@ export const keyboardOpen = {
         // let valueLength = currentValue.length
         // let prevValueLength = keyboardOpen.prevValueLength;
 
-        if (currentValue == "") {
+        if (currentValue === "") {
             cellsList[chosenCellNumber].innerHTML = ""
             // keyboardOpen.prevValueLength = valueLength
         }
@@ -386,12 +428,12 @@ window.addEventListener("keydown", ({ code }) => {
     let symbol = convertLetters(code)
 
     for (let i in buttonsList){
-        if (symbol == buttonsList[i].innerHTML){
+        if (symbol === buttonsList[i].innerHTML){
 
             buttonsList[i].click();
             
 
-            if (buttonsList[i].hasAttribute("guesed")){
+            if (buttonsList[i].hasAttribute("guessed")){
                 buttonsList[i].style.background = "rgba(55, 186, 59, 0.951)"
             }
             else if (buttonsList[i].hasAttribute("found")){
@@ -406,27 +448,27 @@ window.addEventListener("keydown", ({ code }) => {
 
 
         }
-    };
+    }
 
     
-    if (code == "ArrowRight" && Keyboard.properties.words.length < maxTriesNumber){
+    if (code === "ArrowRight" && Keyboard.properties.words.length < maxTriesNumber){
         moveChosenCell("right")
     }
 
-    if (code == "ArrowLeft" && Keyboard.properties.words.length < maxTriesNumber){
+    if (code === "ArrowLeft" && Keyboard.properties.words.length < maxTriesNumber){
         moveChosenCell("left")
     }
     
-    if (code == 'AltRight'){
+    if (code === 'AltRight'){
         alt = true
     }
     
-    if (code == 'Delete'){
+    if (code === 'Delete'){
         cellsList.slice(Keyboard.properties.words.length * allWordsLength, (Keyboard.properties.words.length+1) * allWordsLength).forEach((element) => element.innerHTML = "")
         changeChosenCellNumber(Keyboard.properties.words.length * allWordsLength)
     }
     
-    if (code == "Space"){
+    if (code === "Space"){
         moveChosenCell("right")
     }
 
@@ -437,13 +479,13 @@ window.addEventListener("keyup", ({ code }) => {
     let buttonsList = Array.from(document.getElementsByClassName("keyboard__key button"));
     let symbol = convertLetters(code)
 
-    if (code == "AltRight"){
+    if (code === "AltRight"){
         alt = false
         buttonsList[26].style.background = ""
 }
 
     for (let i in buttonsList){
-        if (symbol == buttonsList[i].innerHTML){
+        if (symbol === buttonsList[i].innerHTML){
 
 
             buttonsList[i].style.background = ""
