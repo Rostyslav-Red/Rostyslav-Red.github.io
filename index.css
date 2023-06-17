@@ -59,11 +59,11 @@ hr {
     background: rgba(166, 120, 120, 0.7);
 }
 
-.keyboard__key[guesed]{
+.keyboard__key[guessed]{
     background: rgba(62, 248, 68, 0.951);
 }
 
-.keyboard__key[guesed]:active{
+.keyboard__key[guessed]:active{
     background: rgba(55, 186, 59, 0.951);
 }
 
